@@ -1,0 +1,16 @@
+/*
+ * Declares the cascade-layer ORDER for the whole app. The first declaration wins, so this file
+ * must be the very first CSS import in main.ts. Later layers beat earlier ones, regardless of
+ * selector specificity. `app.*` layers sit above Vuetify's components/overrides/utilities, while
+ * `vuetify-final` (transitions + trumps) stays last. See lesson "CSS @layer".
+ */
+@layer
+  vuetify-core,
+  vuetify-components,
+  vuetify-overrides,
+  vuetify-utilities,
+  app.tokens,
+  app.base,
+  app.components,
+  app.overrides,
+  vuetify-final;

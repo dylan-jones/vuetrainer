@@ -1,0 +1,8 @@
+// Vuetify Sass variables. vite-plugin-vuetify loads this file before every Vuetify stylesheet,
+// so these overrides apply app-wide. Only variables marked `!default` in Vuetify can be set here.
+// See lesson "Vuetify 4: Sass variables".
+@forward 'vuetify/settings' with (
+  $body-font-family: ('Inter', system-ui, sans-serif),
+  $border-radius-root: 8px,
+  $color-pack: false,
+);

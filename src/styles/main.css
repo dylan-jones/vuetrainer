@@ -1,0 +1,60 @@
+@layer app.tokens {
+  :root {
+    --app-content-width: 72rem;
+    --app-gap: 1rem;
+    --app-prose-width: 70ch;
+  }
+}
+
+@layer app.base {
+  body {
+    background: rgb(var(--v-theme-background));
+  }
+  .prose a {
+    color: rgb(var(--v-theme-primary));
+  }
+  code:not(pre code) {
+    background: rgba(var(--v-theme-on-surface), 0.08);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+  }
+}
+
+/* Lesson body rendered from markdown */
+@layer app.components {
+  .prose {
+    max-inline-size: var(--app-prose-width);
+    line-height: 1.7;
+  }
+  .prose :is(h2, h3) {
+    margin-block: 1.5em 0.5em;
+    line-height: 1.25;
+  }
+  .prose :is(p, ul, ol, pre, table) {
+    margin-block-end: 1em;
+  }
+  .prose :is(ul, ol) {
+    padding-inline-start: 1.5em;
+  }
+  .prose pre {
+    background: #1e2430;
+    color: #e6edf3;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .prose pre code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .prose table {
+    border-collapse: collapse;
+  }
+  .prose :is(th, td) {
+    border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+    padding: 0.4rem 0.75rem;
+    text-align: start;
+  }
+}
