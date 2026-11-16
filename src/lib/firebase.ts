@@ -16,11 +16,7 @@ let app: FirebaseApp | undefined
 
 // Firebase is imported dynamically so local-only mode doesn't ship it.
 export async function getFirebase() {
-  const [{ initializeApp }, auth, firestore] = await Promise.all([
-    import('firebase/app'),
-    import('firebase/auth'),
-    import('firebase/firestore'),
-  ])
+  const [{ initializeApp }, auth] = await Promise.all([import('firebase/app'), import('firebase/auth')])
   app ??= initializeApp(config)
-  return { auth: auth.getAuth(app), firestore: firestore.getFirestore(app), authApi: auth, firestoreApi: firestore }
+  return { auth: auth.getAuth(app), authApi: auth }
 }

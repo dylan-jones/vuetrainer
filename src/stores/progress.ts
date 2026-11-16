@@ -1,6 +1,7 @@
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
-import { getFirebase, isFirebaseConfigured } from '@/lib/firebase'
+import { isFirebaseConfigured } from '@/lib/firebase'
+import { fetchProgress, saveProgress } from '@/lib/api'
 import { lessons } from '@/content/lessons'
 import {
   emptyProgress, itemKey, lessonCounts, mergeProgress, percent, sumCounts, type ProgressData,
@@ -57,9 +58,8 @@ export const useProgressStore = defineStore('progress', () => {
     let current = readLocal(uid)
     if (isFirebaseConfigured && !auth.isLocal) {
       try {
-        const { firestore, firestoreApi } = await getFirebase()
-        const snap = await firestoreApi.getDoc(firestoreApi.doc(firestore, 'users', uid))
-        if (snap.exists()) current = mergeProgress(current, { ...emptyProgress(), ...(snap.data() as ProgressData) })
+        const remote = await fetchProgress()
+        if (remote) current = mergeProgress(current, { ...emptyProgress(), ...remote })
         syncState.value = 'saved'
       } catch {
         syncState.value = 'error'
@@ -77,8 +77,7 @@ export const useProgressStore = defineStore('progress', () => {
     if (!isFirebaseConfigured || auth.isLocal) return
     syncState.value = 'saving'
     try {
-      const { firestore, firestoreApi } = await getFirebase()
-      await firestoreApi.setDoc(firestoreApi.doc(firestore, 'users', uid), { ...data.value })
+      await saveProgress(data.value)
       syncState.value = 'saved'
     } catch {
       syncState.value = 'error'

@@ -1,9 +1,22 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vuetrainer",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-11-13",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
-  }
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "FIREBASE_PROJECT_ID": "gen-lang-client-0066081388"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vuetrainer",
+      "database_id": "fd79fb54-b9a5-4b43-ac87-ed14b597e05d",
+      "migrations_dir": "migrations"
+    }
+  ]
 }

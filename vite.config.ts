@@ -12,6 +12,10 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  server: {
+    // `npm run dev:api` serves the Worker API locally; the dev server forwards /api calls to it.
+    proxy: { '/api': 'http://127.0.0.1:8787' },
+  },
   build: {
     chunkSizeWarningLimit: 700,
   },

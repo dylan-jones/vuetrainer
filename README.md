@@ -24,28 +24,39 @@ With no Firebase config the app runs in **local mode**: progress is stored in th
 
 ## Turn on login + cloud sync (Google or email/password)
 
-1. Create a project at <https://console.firebase.google.com>.
-2. **Authentication → Sign-in method**: enable **Google** and **Email/Password**.
-3. **Firestore Database**: create a database, then publish the rules in `firestore.rules`
-   (each user can only read/write `users/{their uid}`).
-4. **Project settings → Your apps → Web app**: copy the config values into `.env`
-   (see `.env.example`). They are public identifiers, not secrets.
-5. **Authentication → Settings → Authorized domains**: add `localhost` and your Cloudflare domain
-   (e.g. `vuetrainer.pages.dev`).
+Login uses **Firebase Auth**; progress is stored in a **Cloudflare D1** database through a small Worker
+(`worker/index.ts`, routes `GET/PUT /api/progress`). The Worker verifies the user's Firebase ID token and only
+ever reads or writes the row for that user's uid.
 
-## Deploy to Cloudflare Pages
+1. In the Firebase console: **Authentication → Sign-in method**: enable **Google** and **Email/Password**.
+2. **Project settings → Your apps → Web app**: copy the config values into `.env`
+   (see `.env.example`). They are public identifiers, not secrets. Firestore is not used.
+3. **Authentication → Settings → Authorized domains**: add `localhost` and your production hostname.
+4. Set `FIREBASE_PROJECT_ID` in `wrangler.jsonc` to your Firebase project id.
 
-Option A, Git integration (recommended, auto-deploys on every push):
+## Deploy to Cloudflare (Workers + static assets + D1)
 
-1. Push this repo to GitHub (below).
-2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick the repo.
-3. Build command `npm run build`, output directory `dist`.
-4. Add the four `VITE_FIREBASE_*` variables under **Settings → Variables and secrets**.
+One-time:
 
-Option B, CLI: `npx wrangler login`, then `npm run deploy`
-(builds with your local `.env` and runs `wrangler pages deploy dist --project-name vuetrainer`).
+```bash
+npx wrangler login
+npx wrangler d1 create vuetrainer          # put the database_id in wrangler.jsonc
+npm run db:migrate                         # creates the progress table in the remote database
+```
 
-`public/_redirects` makes deep links like `/lesson/css-layers` work as a single-page app.
+Deploy with Git integration (auto-deploys on every push): connect the repo under **Workers & Pages**, build
+command `npm run build`, deploy command `npx wrangler deploy`, and add the four `VITE_FIREBASE_*` values as
+build variables (or commit them in `.env.production`; they are public identifiers).
+Or deploy from your machine: `npm run deploy` (uses your local `.env`).
+
+Run `npm run db:migrate` again whenever you add a file to `migrations/`.
+
+`not_found_handling: single-page-application` in `wrangler.jsonc` makes deep links like `/lesson/css-layers`
+work, and `run_worker_first: ["/api/*"]` sends only API calls to the Worker.
+
+Local API testing: `npm run build && npm run db:migrate:local && npm run dev:api`, then `npm run dev`
+(the dev server proxies `/api` to the Worker on port 8787).
+
 
 ## Push to GitHub
 
