@@ -6,6 +6,7 @@ A personal learning platform for getting ready for a Vue.js job. It tracks progr
 2. **Modern CSS**: `@layer`, advanced Grid, `@container`
 3. **Vue in depth**: fundamentals, advanced slots, component `v-model`, publishing components
 4. **Vuetify 4 styling**: Sass variables, custom CSS layers, component defaults
+5. **Build: Sprintly mock app**: an eight-lesson project that applies everything above
 
 Each lesson has notes, a checklist, an exercise, resources, personal notes and (where useful) a live demo.
 The app itself is the example: it is built with Vue 3, Vite, TypeScript, Pinia, Vue Router and Vuetify 4, and it

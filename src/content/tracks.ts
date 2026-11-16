@@ -25,4 +25,10 @@ export const tracks: Track[] = [
     icon: 'mdi-palette',
     description: 'App-wide styling with Sass variables, custom CSS layers and component defaults.',
   },
+  {
+    id: 'project',
+    title: 'Build: Sprintly mock app',
+    icon: 'mdi-hammer-wrench',
+    description: 'Put it all together: build a team task board from scratch, lesson by lesson.',
+  },
 ]
