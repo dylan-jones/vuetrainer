@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest run",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name vuetrainer"
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
